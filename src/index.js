@@ -28,7 +28,7 @@ function onClick() {
 }
 
 // Alternatively, use the mouse & touch events:
-// sprite.on('click', onClick); // mouse-only
-// sprite.on('tap', onClick); // touch-only
+sprite.on('click', onClick); // mouse-only
+sprite.on('tap', onClick); // touch-only
 
 app.stage.addChild(sprite);
