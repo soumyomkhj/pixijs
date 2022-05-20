@@ -5,8 +5,11 @@ import { Texture } from "pixi.js";
 import { Graphics } from "pixi.js";
 const app = new Application({ 
 	backgroundColor: 0xffffff,
-	width: 1920,
-	height: 1080 });
+	width: 500,
+	height: 500 });
+
+app.renderer.resize(window.innerWidth, window.innerHeight);
+app.renderer.view.style.position = 'absolute';
 document.body.appendChild(app.view);
 
 // Scale mode for all textures, will retain pixelation
@@ -39,8 +42,8 @@ function onPlayVideo() {
 	// Don't need the button anymore
     button.destroy();
 	console.log('Start playing video....');
-	const bird_texture = Texture.from('./assets/1/Animations/bird-shoop.webm');
-	// const bird_texture = Texture.from('./assets/1/Animations/bird-shoop.mov');
+	const bird_texture = Texture.from('./assets/1/Animations/bird-spin.webm');
+	// const bird_texture = Texture.from('./assets/1/Animations/bird-spin.mov');
 	console.log("Texture: " + bird_texture);
 	const bird_anim = new Sprite.from(bird_texture);
 	bird_anim.width = app.screen.width;
