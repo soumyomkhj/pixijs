@@ -13,8 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const app = new Application({ 
 	backgroundColor: 0xffffff,
-	width: 800,
-	height: 800 });
+	autoResize: true,
+	resolution: devicePixelRatio });
 document.body.appendChild(app.view);
 
 const sprite_1_2 = Sprite.from('./assets/1/1_2.png');
@@ -28,18 +28,23 @@ element.style.height = '100px'
 element.style.backgroundColor = 'gray'
 element.style.position = 'relative'
 element.style.bottom = '50%'
+element.style.right = '50%'
+element.style.marginInline = '40%'
 document.body.appendChild(element)
 
 // GSAP based animation of sprite
 // directly done on PIXI sprite
+// we can directly use properties of PIXI sprites
+// to animate in GSAP
 gsap.to(sprite_1_2, {
 	scrollTrigger: {
 		trigger: ".scroll",
-		start: "top center",
+		start: "top 40%",
 		markers: true // markers enabled for debugging
 	},
 	duration: 3.0,
 	y: -300,
+	alpha: 0,
 })
 
 // Lax based animation
@@ -87,3 +92,18 @@ app.stage.addChild(sprite_1_2, sprite_1_3, sprite_1_4);
 // gsap.ticker.add(() => {
 //     app.ticker.update();
 // });
+// Listen for window resize events
+window.addEventListener('resize', resize);
+
+// Resize function window
+function resize() {
+	// Resize the renderer
+	app.renderer.resize(window.innerWidth, window.innerHeight);
+  
+  // You can use the 'screen' property as the renderer visible
+  // area, this is more useful than view.width/height because
+  // it handles resolution
+  rect.position.set(app.screen.width, app.screen.height);
+}
+
+resize();
