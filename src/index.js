@@ -3,76 +3,87 @@ import { Application } from "pixi.js";
 import { Sprite } from "pixi.js";
 import { Texture } from "pixi.js";
 import { Graphics } from "pixi.js";
+import { gsap } from "gsap";
+// import { PixiPlugin } from "gsap/PixiPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import lax from 'lax.js';
+
+gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(PixiPlugin);
+
 const app = new Application({ 
 	backgroundColor: 0xffffff,
-	width: 1920,
-	height: 1080 });
+	width: 800,
+	height: 800 });
 document.body.appendChild(app.view);
 
+const sprite_1_2 = Sprite.from('./assets/1/1_2.png');
+// create a new container to use as scroll trigger
+const element = document.createElement('div');
+// add a class to that element
+element.classList.add('scroll');
+// console.log(element.className);
+// add style to elemnt to view it in browser
+element.style.height = '100px'
+element.style.backgroundColor = 'gray'
+element.style.position = 'relative'
+element.style.bottom = '50%'
+document.body.appendChild(element)
+
+// GSAP based animation of sprite
+// directly done on PIXI sprite
+gsap.to(sprite_1_2, {
+	scrollTrigger: {
+		trigger: ".scroll",
+		start: "top center",
+		markers: true // markers enabled for debugging
+	},
+	duration: 3.0,
+	y: -300,
+})
+
+// Lax based animation
+// To use this we need to render image using css and animate it
+ window.onload = function () {
+    lax.init()
+    // Add a driver that we use to control our animations
+    lax.addDriver('scrollY', function () {
+      return window.scrollY
+    })
+    // Add animation bindings to elements
+    lax.addElements('.scroll', {
+      scrollY: {
+        translateX: [
+          ["elInY", "elCenterY", "elOutY"],
+          [0, 'screenWidth/2', 'screenWidth'],
+        ]
+      }
+    })
+  }
 // Scale mode for all textures, will retain pixelation
 // Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST;
 
 // load sprite and center the sprite's anchor point
-const sprite_1_1 = Sprite.from('./assets/1/1_1.png');
-// Create play button that can be used to trigger the video
-const button = new Graphics()
-    .beginFill(0x0, 0.5)
-    .drawRoundedRect(0, 0, 100, 100, 10)
-    .endFill()
-    .beginFill(0xffffff)
-    .moveTo(36, 30)
-    .lineTo(36, 70)
-    .lineTo(70, 50);
+const sprite_1_3 = Sprite.from('./assets/1/1_3.png');
+const sprite_1_4 = Sprite.from('./assets/1/1_4.png');
 
-// Position the button
-button.x = (app.screen.width - button.width) / 2;
-button.y = (app.screen.height - button.height) / 2;
-
-// Enable interactivity on the button
-button.interactive = true;
-button.buttonMode = true;
-
-// Add to the stage
-button.on('pointertap', onPlayVideo);
-
-function onPlayVideo() {
-	// Don't need the button anymore
-    button.destroy();
-	console.log('Start playing video....');
-	const bird_texture = Texture.from('./assets/1/Animations/bird-shoop.webm');
-	// const bird_texture = Texture.from('./assets/1/Animations/bird-shoop.mov');
-	console.log("Texture: " + bird_texture);
-	const bird_anim = new Sprite.from(bird_texture);
-	bird_anim.width = app.screen.width;
-	bird_anim.height = app.screen.height;
-	console.log("Anim: " + bird_anim);
-	app.stage.addChild(bird_anim);
-}
-
-
-sprite_1_1.anchor.set(0.5)
-// Set sprite's position
-sprite_1_1.position.set(app.screen.width/2,app.screen.height/2);
-// // Opt-in to interactivity
-sprite_1_1.interactive = true;
-
-// // Shows hand cursor
-sprite_1_1.buttonMode = true;
-
-// Pointers normalize touch and mouse
-sprite_1_1.on('pointerdown', onClick);
-// sprite.on('scroll', onScroll);
-
-function onClick() {
-	console.log('Mouse Clicked');
-}
-
-function onScroll() {
-	console.log('Mouse Scrolled');
-}
 // Alternatively, use the mouse & touch events:
 // sprite.on('click', onClick); // mouse-only
 // sprite.on('tap', onClick); // touch-only
+sprite_1_2.interactive = true
+sprite_1_2.position.set(100, 0)
+sprite_1_3.interactive = true
+sprite_1_3.position.set(400, 0)
+sprite_1_4.interactive = true
+sprite_1_4.position.set(700, 0)
 
-app.stage.addChild(sprite_1_1);
-app.stage.addChild(button);
+app.stage.addChild(sprite_1_2, sprite_1_3, sprite_1_4);
+
+// We stop Pixi ticker using stop() function because autoStart = false does NOT stop the shared ticker:
+// doc: http://pixijs.download/release/docs/PIXI.Application.html
+// app.ticker.stop();
+
+// // Now, we use 'tick' from gsap
+// gsap.ticker.add(() => {
+//     app.ticker.update();
+// });
