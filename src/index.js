@@ -6,7 +6,7 @@ import { Graphics } from "pixi.js";
 import { gsap } from "gsap";
 // import { PixiPlugin } from "gsap/PixiPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import lax from 'lax.js';
+import lax from "lax.js";
 
 gsap.registerPlugin(ScrollTrigger);
 // gsap.registerPlugin(PixiPlugin);
@@ -14,7 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
 const app = new Application({ 
 	backgroundColor: 0xffffff,
 	autoResize: true,
-	resolution: devicePixelRatio });
+});
+app.renderer.resize(window.innerWidth,window.innerHeight);
 document.body.appendChild(app.view);
 
 const sprite_1_2 = Sprite.from('./assets/1/1_2.png');
@@ -42,8 +43,8 @@ gsap.to(sprite_1_2, {
 		start: "top 40%",
 		markers: true // markers enabled for debugging
 	},
-	duration: 3.0,
-	y: -300,
+	duration: 1.0,
+	y: -200,
 	alpha: 0,
 })
 
@@ -61,7 +62,7 @@ gsap.to(sprite_1_2, {
         translateX: [
           ["elInY", "elCenterY", "elOutY"],
           [0, 'screenWidth/2', 'screenWidth'],
-        ]
+        ] 
       }
     })
   }
@@ -76,11 +77,11 @@ const sprite_1_4 = Sprite.from('./assets/1/1_4.png');
 // sprite.on('click', onClick); // mouse-only
 // sprite.on('tap', onClick); // touch-only
 sprite_1_2.interactive = true
-sprite_1_2.position.set(100, 0)
+sprite_1_2.position.set(window.innerWidth/4-190, -5)
 sprite_1_3.interactive = true
-sprite_1_3.position.set(400, 0)
+sprite_1_3.position.set(window.innerWidth/2-190, 0)
 sprite_1_4.interactive = true
-sprite_1_4.position.set(700, 0)
+sprite_1_4.position.set(window.innerWidth*3/4-190, -9)
 
 app.stage.addChild(sprite_1_2, sprite_1_3, sprite_1_4);
 
